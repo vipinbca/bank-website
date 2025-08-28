@@ -94,9 +94,9 @@
             if (dpass === currentUser.password) {
                 balance += depositAmt;
                 document.getElementById("depositResult").innerText =
-                    `Deposit successful. Balance: ${balance}`;
+                    `Balance: ${balance}`;
                 document.getElementById("withdrawResult").innerText =
-                    `Withdraw successful. Balance: ${balance}`;
+                    `Balance: ${balance}`;
                 let date = new Date().toLocaleString();
                 let type = "Deposit";
                 let amount = depositAmt;
@@ -125,9 +125,9 @@
                 } else {
                     balance -= withdrawAmt;
                     document.getElementById("withdrawResult").innerText =
-                        `Withdraw successful. Balance: ${balance}`;
+                        `Balance: ${balance}`;
                     document.getElementById("depositResult").innerText =
-                        `Deposit successful. Balance: ${balance}`;
+                        `Balance: ${balance}`;
                     let date = new Date().toLocaleString();
                     let type = "Withdraw";
                     let amount = withdrawAmt;
@@ -151,5 +151,6 @@
 
 
 </body>
+
 
 </html>
