@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gradient-to-r from-indigo-800 via-blue-900 to-black min-h-screen flex items-center justify-center">
+
+  <form
+    class="w-full max-w-md backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-8 space-y-6">
+    <h2 class="text-3xl font-bold text-white text-center">Sign Up</h2>
+    <p class="text-gray-300 text-center text-sm">Join us and explore amazing features</p>
+
+    <div>
+      <label for="username" class="block mb-2 text-sm font-medium text-gray-200">Username</label>
+      <input type="text" id="username" placeholder="Enter Your Name"
+        class="w-full p-3 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+        required />
+    </div>
+
+    <div>
+      <label for="acnumber" class="block mb-2 text-sm font-medium text-gray-200">Account number</label>
+      <input type="number" id="acnumber" placeholder="Enter Account Number"
+        class="w-full p-3 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+        required />
+    </div>
+
+    <div>
+      <label for="password" class="block mb-2 text-sm font-medium text-gray-200">Password</label>
+      <input type="password" id="password" placeholder="••••••••"
+        class="w-full p-3 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+        required />
+    </div>
+
+    <div class="flex items-start">
+      <input id="terms" type="checkbox"
+        class="w-4 h-4 text-cyan-400 bg-white/20 border-white/30 rounded focus:ring-cyan-500" required />
+      <label for="terms" class="ml-2 text-sm text-gray-300">
+        I agree with the <a href="#" class="text-cyan-400 hover:underline">terms and conditions</a>
+      </label>
+    </div>
+
+    <button type="button" onclick="register()"
+      class="w-full py-3 bg-cyan-500 text-white font-medium rounded-lg hover:bg-cyan-600 focus:ring-4 focus:ring-cyan-300 transition">
+      Register
+    </button>
+
+    <p class="text-sm text-gray-300 text-center">
+      Already have an account? <a href="./login.html" class="text-cyan-400 hover:underline">Login</a>
+    </p>
+  </form>
+
+
+  <script>
+    function register() {
+      const userDetails = {
+        userName: username.value,
+        acNumber: acnumber.value,
+        password: password.value
+      }
+      console.log(userDetails);
+
+
+      if (userDetails.userName == "" || userDetails.acNumber == "" || userDetails.password == "") {
+        alert("please fill the form")
+      }
+      else {
+        if (localStorage.getItem(userDetails.userName)) {
+          alert("Username already exists!");
+        }
+        else {
+          localStorage.setItem(userDetails.userName, JSON.stringify(userDetails));
+          alert("Register successful");
+          window.location.href = 'login.html';
+        }
+      }
+
+    }
+
+
+  </script>
+
+</body>
+
+</html>

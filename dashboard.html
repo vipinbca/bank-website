@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gradient-to-r from-indigo-800 via-blue-900 to-black ">
+    <h1 id="welcome" class="text-4xl md:text-5xl font-extrabold text-center mt-6 
+           bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500 
+           bg-clip-text text-transparent drop-shadow-lg tracking-wide">
+    </h1>
+    <section class="flex gap-100 min-h-screen  items-center justify-center">
+        <!-- deposit -->
+        <form class="w-110 backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-8 space-y-6">
+            <h2 class="text-3xl font-bold text-white text-center">Deposit</h2>
+
+            <div>
+                <input type="text" id="depositamount" placeholder="Enter Your Amount"
+                    class="w-full p-3 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+                    required />
+            </div>
+
+            <div>
+                <input type="password" id="dpassword" placeholder="••••••••"
+                    class="w-full p-3 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+                    required />
+            </div>
+
+
+
+            <button type="button" onclick="deposit()"
+                class="w-full py-3 bg-cyan-500 text-white font-medium rounded-lg hover:bg-cyan-600 focus:ring-4 focus:ring-cyan-300 transition">
+                Deposit
+            </button>
+            <div id="depositResult" class="mt-4 text-gray-700 dark:text-gray-300 text-sm"></div>
+        </form>
+        <!-- withdraw -->
+        <form class="w-110 backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-8 space-y-6">
+            <h2 class="text-3xl font-bold text-white text-center">Withdraw</h2>
+
+            <div>
+                <input type="text" id="withdrawamount" placeholder="Enter Your Amount"
+                    class="w-full p-3 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+                    required />
+            </div>
+
+            <div>
+                <input type="password" id="wpassword" placeholder="••••••••"
+                    class="w-full p-3 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-cyan-400 focus:outline-none"
+                    required />
+            </div>
+
+
+
+            <button type="button" onclick="withdraw()"
+                class="w-full py-3 bg-cyan-500 text-white font-medium rounded-lg hover:bg-cyan-600 focus:ring-4 focus:ring-cyan-300 transition">
+                Withdraw
+            </button>
+            <div id="withdrawResult" class="mt-4 text-gray-700 dark:text-gray-300 text-sm"></div>
+        </form>
+    </section>
+    <!-- transaction history -->
+    <section
+        class="ml-130 w-110 backdrop-blur-lg bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-8 space-y-6">
+        <h2 class="text-3xl font-bold text-white text-center">Transaction History</h2>
+        <table id="result" class="w-full text-white border border-gray-400 text-sm text-center">
+            <thead>
+                <tr class="bg-white/20">
+                    <th class="p-2 border border-gray-400">Date & Time</th>
+                    <th class="p-2 border border-gray-400">Type</th>
+                    <th class="p-2 border border-gray-400">Amount</th>
+                    <th class="p-2 border border-gray-400">Balance</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+
+    <script>
+        let currentUserName = localStorage.getItem("currentUser");
+        let currentUser = JSON.parse(localStorage.getItem(currentUserName));
+        document.getElementById("welcome").innerText = `Welcome, ${currentUser.userName}`;
+
+        let balance = 0;
+
+        function deposit() {
+            let dpass = document.getElementById("dpassword").value;
+            let depositAmt = Number(document.getElementById("depositamount").value);
+            if (dpass === currentUser.password) {
+                balance += depositAmt;
+                document.getElementById("depositResult").innerText =
+                    `Deposit successful. Balance: ${balance}`;
+                document.getElementById("withdrawResult").innerText =
+                    `Withdraw successful. Balance: ${balance}`;
+                let date = new Date().toLocaleString();
+                let type = "Deposit";
+                let amount = depositAmt;
+                if (!currentUser.transactions) {
+                    currentUser.transactions = [];
+                }
+                currentUser.transactions.push({ date, type, amount, balance });
+                let row = `<tr>
+                          <td class="border border-gray-400 p-2">${date}</td>
+                          <td class="border border-gray-400 p-2">${type}</td>
+                          <td class="border border-gray-400 p-2">${amount}</td>
+                          <td class="border border-gray-400 p-2">${balance}</td>
+                       </tr>`;
+                document.querySelector("#result tbody").innerHTML += row;
+            } else {
+                alert("incorrect password");
+            }
+        }
+
+        function withdraw() {
+            let wpass = document.getElementById("wpassword").value;
+            let withdrawAmt = Number(document.getElementById("withdrawamount").value);
+            if (wpass === currentUser.password) {
+                if (balance - withdrawAmt < 0) {
+                    alert("insufficient fund");
+                } else {
+                    balance -= withdrawAmt;
+                    document.getElementById("withdrawResult").innerText =
+                        `Withdraw successful. Balance: ${balance}`;
+                    document.getElementById("depositResult").innerText =
+                        `Deposit successful. Balance: ${balance}`;
+                    let date = new Date().toLocaleString();
+                    let type = "Withdraw";
+                    let amount = withdrawAmt;
+                    if (!currentUser.transactions) {
+                        currentUser.transactions = [];
+                    }
+                    currentUser.transactions.push({ date, type, amount, balance });
+                    let row = `<tr>
+                          <td class="border border-gray-400 p-2">${date}</td>
+                          <td class="border border-gray-400 p-2">${type}</td>
+                          <td class="border border-gray-400 p-2">${amount}</td>
+                          <td class="border border-gray-400 p-2">${balance}</td>
+                       </tr>`;
+                    document.querySelector("#result tbody").innerHTML += row;
+                }
+            } else {
+                alert("incorrect password");
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
